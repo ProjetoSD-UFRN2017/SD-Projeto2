@@ -84,66 +84,66 @@ clientSocket.connect((serverName,serverPort))
 
 # Início do sistema #
 
-        #led1 = mraa.Gpio(pino_led1)
-        #led2 = mraa.Gpio(pino_led2)
-        #led3 = mraa.Gpio(pino_led3)
-        #key = mraa.Gpio(pino_chave)
+#led1 = mraa.Gpio(pino_led1)
+#led2 = mraa.Gpio(pino_led2)
+#led3 = mraa.Gpio(pino_led3)
+#key = mraa.Gpio(pino_chave)
 
-        #led1.dir(mraa.DIR_OUT)
-        #led2.dir(mraa.DIR_OUT)
-        #led3.dir(mraa.DIR_OUT)
+#led1.dir(mraa.DIR_OUT)
+#led2.dir(mraa.DIR_OUT)
+#led3.dir(mraa.DIR_OUT)
 
-        #mraa_pwm1 = mraa.Pwm(pino_pwm)
-        #mraa_pwm1.period_us(64)
-        #mraa_pwm1.enable(True)
+#mraa_pwm1 = mraa.Pwm(pino_pwm)
+#mraa_pwm1.period_us(64)
+#mraa_pwm1.enable(True)
 
-	print('Iniciando o sistema, recebendo curva selecionada...')
-	curva = clientSocket.recv(1024)
-	print (curva)
+print('Iniciando o sistema, recebendo curva selecionada...')
+curva = clientSocket.recv(1024)
+print (curva)
 
-        ''' 
-	# While Principal (com mraa)
-        while True:
-                time_count()
-                if flag_chave == 1:
-                        ler_adc()
-                        curva_pwm(mraa_pwm1,curva,clientSocket)
-                        if tempo_segundos > 180: # 3 minutos
-                                tempo_segundos = 0
-                                flag_chave = 0
-                                
-                else:
-                        chave = key.read()
-                        if chave == 1:
-                                tempo_segundos = 0
-                                flag_chave = 1
-        '''
-
-	# While de teste (sem Thread)
-	while True:
-		time_count()
-		if tempo_segundos > 180: # 3 minutos
-			break
+''' 
+# While Principal (com mraa)
+while True:
+	time_count()
+	if flag_chave == 1:
 		ler_adc()
-		curva_pwm(0,curva,clientSocket)
-
-	# While de teste (com Thread)
-	#
-	'''
-	while True:
-		time_count()
+		curva_pwm(mraa_pwm1,curva,clientSocket)
 		if tempo_segundos > 180: # 3 minutos
-			break
+			tempo_segundos = 0
+			flag_chave = 0
 
-		# Inicia as threads
-		t1 = threading.Thread(target=ler_adc)
-		t2 = threading.Thread(target=curva_pwm,args(0,curva,clientSocket,)) # Note o extra ',' (obrigatorio)
+	else:
+		chave = key.read()
+		if chave == 1:
+			tempo_segundos = 0
+			flag_chave = 1
+'''
 
-		# Dispara as threads
-		t1.start()
-		t2.start()
-	'''
-	#
+# While de teste (sem Thread)
+while True:
+	time_count()
+	if tempo_segundos > 180: # 3 minutos
+		break
+	ler_adc()
+	curva_pwm(0,curva,clientSocket)
+
+# While de teste (com Thread)
+#
+'''
+while True:
+	time_count()
+	if tempo_segundos > 180: # 3 minutos
+		break
+
+	# Inicia as threads
+	t1 = threading.Thread(target=ler_adc)
+	t2 = threading.Thread(target=curva_pwm,args(0,curva,clientSocket,)) # Note o extra ',' (obrigatorio)
+
+	# Dispara as threads
+	t1.start()
+	t2.start()
+'''
+#
 		
 # Fim do sistema #
 clientSocket.close()
